@@ -15,7 +15,7 @@ const validateReqForCategoryId = async (req, res, next) => {
     let category = await Categories.findByPk(categoryId);
     if (!category) {
       res.status(400).send({
-        message: "Category does not exist",
+        message: "Category ID does not exist",
       });
     }
   } else {
