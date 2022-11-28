@@ -1,6 +1,8 @@
 // Importing Files
 let Products = require("./../model/product");
 let sequelizeInstance = require("./../config/db.config");
+const { Sequelize } = require("sequelize");
+const e = require("express");
 
 // Creating Product Table
 let createTable = async () => {
@@ -47,10 +49,56 @@ let insertProducts = async () => {
 
 // Finding All Product
 let getAllProducts = async (req, res, next) => {
-  let products = await Products.findAll();
-  res.writeHead(200, { "content-Type": "application/json" });
-  res.write(JSON.stringify(products));
+  let categoryId = req.query.categoryId;
+  let minPrice = req.query.minPrice;
+  let maxPrice = req.query.maxPrice;
+  let products = [];
+
+  if (Object.keys(req.query).length == 0) {
+    products = await Products.findAll();
+  } else {
+    if (categoryId && !(minPrice || maxPrice)) {
+      products = await filterByCategory(categoryId);
+    } else if (!categoryId && minPrice && maxPrice) {
+      products = await filterByPriceRange(minPrice, maxPrice);
+    } else {
+      products = await Products.findAll({
+        where: {
+          categoryId: categoryId,
+          price: {
+            [Sequelize.Op.gte]: minPrice,
+            [Sequelize.Op.lte]: maxPrice,
+          },
+        },
+      });
+    }
+  }
+
+  res.status(200).json(products);
   res.end();
+};
+
+let filterByCategory = async (categoryId) => {
+  let filteredProducts = await Products.findAll({
+    where: {
+      categoryId: categoryId,
+    },
+  });
+
+  return filteredProducts;
+};
+
+let filterByPriceRange = async (minPrice, maxPrice) => {
+  let filteredProducts = await Products.findAll({
+    where: {
+      price: {
+        [Sequelize.Op.gte]: minPrice,
+        [Sequelize.Op.lte]: maxPrice,
+      },
+    },
+  });
+
+  return filteredProducts;
 };
 
 // Finding All Product by Id
