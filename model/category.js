@@ -5,7 +5,7 @@ let dbConnection = require("./../config/db.config");
 let categoryModel = dbConnection.define(
   "categories",
   {
-    categoryId: {
+    Id: {
       type: sequelize.DataTypes.BIGINT,
       primaryKey: true,
       allowNull: false,

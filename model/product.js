@@ -5,7 +5,7 @@ let dbConnection = require("./../config/db.config");
 let productModel = dbConnection.define(
   "products",
   {
-    ProductId: {
+    Id: {
       type: sequelize.DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
@@ -19,11 +19,6 @@ let productModel = dbConnection.define(
 
     price: {
       type: sequelize.DataTypes.BIGINT,
-      allowNull: false,
-    },
-
-    categoryId: {
-      type: sequelize.DataTypes.INTEGER,
       allowNull: false,
     },
   },

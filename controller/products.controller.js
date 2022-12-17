@@ -1,18 +1,18 @@
 // Importing Files
 let Products = require("./../model/product");
-let sequelizeInstance = require("./../config/db.config");
+let dbConnection = require("./../config/db.config");
 const { Sequelize } = require("sequelize");
 const e = require("express");
 
-// Creating Product Table
-let createTable = async () => {
-  await sequelizeInstance.sync({ force: true });
-  insertProducts();
-  console.log("Product table is created");
-};
+// // Creating Product Table
+// let createTable = async () => {
+//   await sequelizeInstance.sync({ force: true });
+//   insertProducts();
+//   console.log("Product table is created");
+// };
 
 // Inserting Product Table
-let insertProducts = async () => {
+let insertProducts = async (req, res, next) => {
   await Products.bulkCreate([
     {
       name: "Samsung Galaxy Note",
@@ -31,12 +31,12 @@ let insertProducts = async () => {
     },
     {
       name: "Boat Rugged",
-      categoryId: 5,
+      categoryId: 4,
       price: 4000,
     },
     {
       name: "JBL Storm",
-      categoryId: 5,
+      categoryId: 3,
       price: 9000,
     },
     {
@@ -45,6 +45,10 @@ let insertProducts = async () => {
       price: 32000,
     },
   ]);
+
+  res.status(201).json({
+    message: "Products added",
+  });
 };
 
 // Finding All Product
@@ -181,7 +185,7 @@ let updateProductById = async (req, res, next) => {
   }
 };
 
-createTable();
+// createTable();
 
 module.exports = {
   getAllProducts,
@@ -189,4 +193,5 @@ module.exports = {
   addNewProduct,
   deleteProductById,
   updateProductById,
+  insertProducts,
 };

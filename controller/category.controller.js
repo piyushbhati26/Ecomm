@@ -1,32 +1,7 @@
 // Importing Files
 let Categories = require("./../model/category");
-let sequelizeInstance = require("./../config/db.config");
+let dbConnection = require("./../config/db.config");
 let express = require("express");
-
-// Creating Category Table
-let createTable = async () => {
-  await sequelizeInstance.sync({ force: true });
-  insertCategories();
-  console.log("Category table creataed successfully");
-};
-
-// Inserting Category Table
-let insertCategories = async () => {
-  await Categories.bulkCreate([
-    {
-      name: "Fashion",
-    },
-    {
-      name: "Mobiles",
-    },
-    {
-      name: "Electronics",
-    },
-    {
-      name: "Appliances",
-    },
-  ]);
-};
 
 // Finding All Category
 let getAllCategories = async (req, res, next) => {
@@ -116,7 +91,7 @@ let updateCategoryById = async (req, res, next) => {
   }
 };
 
-createTable();
+// createTable();
 
 let all = {
   getAllCategories,
